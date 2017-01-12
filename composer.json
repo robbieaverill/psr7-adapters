@@ -3,7 +3,7 @@
     "description": "PSR-7 compliant adapters for SilverStripe HTTP classes",
     "type": "silverstripe-module",
     "require": {
-        "silverstripe/framework": "^4.0",
+        "silverstripe/framework": "^4.0@dev",
         "guzzlehttp/psr7": "^1.3"
     },
     "license": "BSD-3-Clause",
