@@ -12,6 +12,11 @@ use SilverStripe\Control\HTTPRequest;
 class HttpRequestAdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * {@inheritDoc}
+     */
+    protected $backupGlobals = false;
+
+    /**
      * Ensure that the Request class returned is a PSR-7 interface
      */
     public function testReturnsPsr7CompliantClass()
