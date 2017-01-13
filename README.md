@@ -1,6 +1,7 @@
 # robbie/psr7-adapters
 
-[![Build Status](https://travis-ci.org/robbieaverill/psr7-adapters.svg?branch=master)](https://travis-ci.org/robbieaverill/psr7-adapters)
+[![Build Status](https://travis-ci.org/robbieaverill/psr7-adapters.svg?branch=master)](https://travis-ci.org/robbieaverill/psr7-adapters) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/robbieaverill/psr7-adapters/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/robbieaverill/psr7-adapters/?branch=master) [![codecov](https://codecov.io/gh/robbieaverill/psr7-adapters/branch/master/graph/badge.svg)](https://codecov.io/gh/robbieaverill/psr7-adapters)
+
 
 PSR-7 compliant, immutable adapter interfaces for SilverStripe HTTP classes.
 
@@ -46,15 +47,19 @@ $response = $myResponse->toPsr7();
 From here you can use any of the PSR-7 interface methods, and the results will always be immutable:
 
 ```php
+<?php
+
 $newResponse = $response->withHeader('Content-Type', 'application/json');
 $newResponse = $newResponse->withHeader('X-Custom-Header', 'my-value-here');
 
-// $response !== $newResponse
+// $response !== $newResponse -> #psr7-ftw
 ```
 
 The same concept applies to the `HttpRequestAdapter`, for example:
 
 ```php
+<?php
+
 # Context: PageController
 use Robbie\Psr7\HttpRequestAdapter;
 
@@ -64,5 +69,6 @@ $request = $this->getRequest();
 $adapter = new HttpRequestAdapter($request);
 $psrInterface = $adapter->toPsr7();
 
+// Outputs all your initial request headers:
 print_r($psrInterface->getHeaders());
 ```
