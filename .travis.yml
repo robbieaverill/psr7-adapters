@@ -16,7 +16,7 @@ before_script:
  - cd ~/builds/ss
 
 script:
- - vendor/bin/phpunit psr7-adapters/tests --coverage-clover=coverage.xml
+ - vendor/bin/phpunit --coverage-clover=coverage.xml psr7-adapters/tests
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
