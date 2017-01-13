@@ -3,17 +3,23 @@
 namespace Robbie\Psr7;
 
 use GuzzleHttp\Psr7\ServerRequest;
+use Robbie\Psr7\AbstractHttpAdapter;
 use SilverStripe\Control\HTTPRequest;
 
 /**
  * @package psr7-adapters
  */
-class HttpRequestAdapter
+class HttpRequestAdapter extends AbstractHttpAdapter
 {
     /**
      * @var array
      */
     protected $serverVars;
+
+    /**
+     * @var HTTPRequest
+     */
+    protected $httpRequest;
 
     /**
      * Creates a PSR-7 compliant ServerRequestInterface from the given HTTPRequest
@@ -83,18 +89,6 @@ class HttpRequestAdapter
         $uri .= $vars['REQUEST_URI'];
 
         return $uri;
-    }
-
-    /**
-     * Get the protocol version from the server
-     *
-     * @return string E.g. "1.1"
-     */
-    public function getProtocolVersion()
-    {
-        $protocolAndVersion = $_SERVER['SERVER_PROTOCOL'];
-        list($protocol, $version) = explode('/', $protocolAndVersion);
-        return $version;
     }
 
     /**

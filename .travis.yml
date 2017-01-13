@@ -17,3 +17,6 @@ before_script:
 
 script:
  - vendor/bin/phpunit psr7-adapters/tests
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
