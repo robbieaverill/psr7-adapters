@@ -80,7 +80,7 @@ print_r($psrInterface->getHeaders());
 To return a PSR-7 interface back to either an `HTTPRequest` or `HTTPResponse` class you simply need to
 do the same thing as going *to*, only use `->fromPsr7($input)` instead:
 
-```
+```php
 <?php
 
 // $requestInterface is an instance of Psr\Http\Message\ServerRequestInterface
