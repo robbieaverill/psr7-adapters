@@ -2,6 +2,10 @@
 
 namespace Robbie\Psr7;
 
+use Psr\Http\Message\MessageInterface;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\HTTPResponse;
+
 /**
  * Provides common functionality used between Request and Response objects
  *
@@ -17,9 +21,35 @@ abstract class AbstractHttpAdapter
     /**
      * Perform a conversion from a HTTPResponse or HTTPRequest into the corresponding PSR-7 interface
      *
-     * @return \Psr\Http\Message\MessageInterface
+     * @param  HTTPRequest|HTTPResponse $input
+     * @return MessageInterface
      */
-    abstract public function toPsr7();
+    abstract public function toPsr7($input);
+
+    /**
+     * Perform a conversion from a PSR-7 interface to the corresponding HTTPRequest or HTTPResponse class
+     *
+     * @param  MessageInterface $input
+     * @return HTTPRequest|HTTPResponse
+     */
+    abstract public function fromPsr7($input);
+
+    /**
+     * PSR-7 interfaces support multiple headers per type, whereas SilverStripe classes do not.
+     *
+     * This method will assign headers as a comma delimited string from the PSR-7 interface to the SilverStripe class
+     *
+     * @param MessageInterface         $from
+     * @param HTTPRequest|HTTPResponse $to
+     */
+    public function importHeaders(MessageInterface $from, $to)
+    {
+        foreach ($from->getHeaders() as $key => $headers) {
+            foreach ($headers as $header) {
+                $to->addHeader($key, $from->getHeaderLine($key));
+            }
+        }
+    }
 
     /**
      * Get the protocol version - either from a previously set value, or from the server

@@ -22,13 +22,15 @@ Add `?flush=1` to your browser URL, `flush=1` to your `sake` command arguments o
 
 ## Use
 
+### Converting to PSR-7
+
 This module works by providing either a `HTTPRequest` or a `HTTPResponse` class that is pre-configured and ready to be
 sent to the client/server to the corresponding adapter class:
 
 * `HTTPRequest` uses the `Robbie\Psr7\HttpRequestAdapter` class
 * `HTTPResponse` uses the `Robbie\Psr7\HttpResponseAdapter` class
 
-To retrieve a bootstrapped PSR-7 `ServerRequestInterface` or `ResponseInterface` you can call `->toPsr7()` on either of
+To retrieve a bootstrapped PSR-7 `ServerRequestInterface` or `ResponseInterface` you can call `->toPsr7($request)` on either of
 these classes, for example:
 
 ```php
@@ -41,7 +43,7 @@ $myResponse = new \SilverStripe\Control\HTTPResponse(
 );
 
 /** @var \Psr\Http\Message\ResponseInterface $response */
-$response = $myResponse->toPsr7();
+$response = (new \Robbie\Psr7\HttpResponseAdapter)->toPsr7($myResponse);
 ```
 
 From here you can use any of the PSR-7 interface methods, and the results will always be immutable:
@@ -66,9 +68,23 @@ use Robbie\Psr7\HttpRequestAdapter;
 // ...
 
 $request = $this->getRequest();
-$adapter = new HttpRequestAdapter($request);
-$psrInterface = $adapter->toPsr7();
+$adapter = new HttpRequestAdapter;
+$psrInterface = $adapter->toPsr7($request);
 
 // Outputs all your initial request headers:
 print_r($psrInterface->getHeaders());
 ```
+
+### Converting from PSR-7
+
+To return a PSR-7 interface back to either an `HTTPRequest` or `HTTPResponse` class you simply need to
+do the same thing as going *to*, only use `->fromPsr7($input)` instead:
+
+```
+<?php
+
+// $requestInterface is an instance of Psr\Http\Message\ServerRequestInterface
+$httpRequest = (new HttpRequestAdapter)->fromPsr7($requestInterface);
+```
+
+`$httpRequest` is not a SilverStripe `HTTPRequest` class.

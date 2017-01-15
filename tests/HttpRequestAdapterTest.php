@@ -53,6 +53,23 @@ class HttpRequestAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that a PSR-7 interface can be imported into a HTTPRequest interface
+     */
+    public function testGetHttpRequestFromPsr7Interface()
+    {
+        $interface = $this->getInterface('POST', '/path/to/post', ['abc' => 'def'], ['foo' => 'bar'], 'foo=bar');
+        $interface = $interface->withHeader('Token', 'foo')->withAddedHeader('Token', 'bar');
+
+        $result = (new HTTPRequestAdapter)->fromPsr7($interface);
+
+        $this->assertSame('POST', $result->httpMethod());
+        $this->assertSame('path/to/post', $result->getURL());
+        $this->assertSame(['abc' => 'def'], $result->getVars());
+        $this->assertSame(['foo' => 'bar'], $result->postVars());
+        $this->assertSame('foo, bar', $result->getHeader('Token'));
+    }
+
+    /**
      * @param  string $method
      * @param  string $uri
      * @param  array  $get
@@ -63,9 +80,9 @@ class HttpRequestAdapterTest extends \PHPUnit_Framework_TestCase
     protected function getInterface($method, $uri, $get = [], $post = [], $body = null)
     {
         $httpRequest = new HTTPRequest($method, $uri, $get, $post, $body);
-        $adapter = new HttpRequestAdapter($httpRequest);
+        $adapter = new HttpRequestAdapter;
         $adapter->setServerVars($this->mockRequestData());
-        return $adapter->toPsr7();
+        return $adapter->toPsr7($httpRequest);
     }
 
     /**

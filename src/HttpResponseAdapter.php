@@ -3,6 +3,7 @@
 namespace Robbie\Psr7;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Robbie\Psr7\AbstractHttpAdapter;
 use SilverStripe\Control\HTTPResponse;
 
@@ -12,33 +13,32 @@ use SilverStripe\Control\HTTPResponse;
 class HttpResponseAdapter extends AbstractHttpAdapter
 {
     /**
-     * @var HTTPResponse
+     * {@inheritDoc}
      */
-    protected $httpResponse;
-
-    /**
-     * Creates a PSR-7 compliant ResponseInterface from the given HTTPResponse
-     *
-     * @param HTTPResponse $request
-     */
-    public function __construct(HTTPResponse $request)
+    public function toPsr7($input)
     {
-        $this->httpResponse = $request;
+        return new Response(
+            $input->getStatusCode(),
+            $input->getHeaders(),
+            $input->getBody(),
+            $this->getProtocolVersion(),
+            $input->getStatusDescription()
+        );
     }
 
     /**
-     * Return a bootstrapped PSR-7 ResponseInterface
-     *
-     * @return \Psr\Http\Message\ResponseInterface
+     * {@inheritDoc}
      */
-    public function toPsr7()
+    public function fromPsr7($input)
     {
-        return new Response(
-            $this->httpResponse->getStatusCode(),
-            $this->httpResponse->getHeaders(),
-            $this->httpResponse->getBody(),
-            $this->getProtocolVersion(),
-            $this->httpResponse->getStatusDescription()
+        $adapted = new HTTPResponse(
+            (string) $input->getBody(),
+            $input->getStatusCode(),
+            $input->getReasonPhrase()
         );
+
+        $this->importHeaders($input, $adapted);
+
+        return $adapted;
     }
 }

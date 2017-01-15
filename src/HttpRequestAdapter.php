@@ -3,6 +3,7 @@
 namespace Robbie\Psr7;
 
 use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
 use Robbie\Psr7\AbstractHttpAdapter;
 use SilverStripe\Control\HTTPRequest;
 
@@ -17,54 +18,63 @@ class HttpRequestAdapter extends AbstractHttpAdapter
     protected $serverVars;
 
     /**
-     * @var HTTPRequest
+     * Set up the server vars - they can be overridden if required
      */
-    protected $httpRequest;
-
-    /**
-     * Creates a PSR-7 compliant ServerRequestInterface from the given HTTPRequest
-     *
-     * @param HTTPRequest $request
-     */
-    public function __construct(HTTPRequest $request)
+    public function __construct()
     {
-        $this->httpRequest = $request;
-        $this->serverVars = $_SERVER;
+        $this->setServerVars($_SERVER);
     }
 
     /**
-     * Return a bootstrapped PSR-7 ServerRequestInterface
-     *
-     * @return \Psr\Http\Message\ServerRequestInterface
+     * {@inheritDoc}
      */
-    public function toPsr7()
+    public function toPsr7($input)
     {
         $request = new ServerRequest(
-            $this->httpRequest->httpMethod(),
-            $this->getUri(),
-            $this->httpRequest->getHeaders(),
-            $this->httpRequest->getBody(),
+            $input->httpMethod(),
+            $this->getUri($input->getURL()),
+            $input->getHeaders(),
+            $input->getBody(),
             $this->getProtocolVersion(),
-            $_SERVER
+            $this->getServerVars()
         );
 
-        if (!empty($this->httpRequest->getVars())) {
-            $request = $request->withQueryParams($this->httpRequest->getVars());
+        if (!empty($input->getVars())) {
+            $request = $request->withQueryParams($input->getVars());
         }
 
-        if (!empty($this->httpRequest->postVars())) {
-            $request = $request->withParsedBody($this->httpRequest->postVars());
+        if (!empty($input->postVars())) {
+            $request = $request->withParsedBody($input->postVars());
         }
 
         return $request;
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function fromPsr7($input)
+    {
+        $adapted = new HTTPRequest(
+            $input->getMethod(),
+            (string) $input->getUri()->getPath(),
+            $input->getQueryParams(),
+            $input->getParsedBody(),
+            (string) $input->getBody()
+        );
+
+        $this->importHeaders($input, $adapted);
+
+        return $adapted;
+    }
+
+    /**
      * Get the full request URI (can be empty, but probably won't be)
      *
+     * @param  string $path
      * @return string
      */
-    public function getUri()
+    public function getUri($path)
     {
         $vars = $this->getServerVars();
 
@@ -86,7 +96,7 @@ class HttpRequestAdapter extends AbstractHttpAdapter
             $uri .= $vars['HTTP_HOST'];
         }
 
-        $uri .= $vars['REQUEST_URI'];
+        $uri .= '/' . ltrim($path, '/');
 
         return $uri;
     }

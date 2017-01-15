@@ -70,6 +70,24 @@ class HttpResponseAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that a PSR-7 interface can be imported (with multiple headers converted to a single line) to a
+     * HTTPResponse class
+     */
+    public function testCanImportPsr7InterfaceToHttpResponse()
+    {
+        $body = json_encode(['success' => true]);
+        $interface = $this->getInterface($body, 201, 'Testing');
+        $interface = $interface->withHeader('Foo', 'bar')->withAddedHeader('Foo', 'baz');
+
+        $result = (new HttpResponseAdapter)->fromPsr7($interface);
+
+        $this->assertSame($body, $result->getBody());
+        $this->assertSame(201, $result->getStatusCode());
+        $this->assertSame('Testing', $result->getStatusDescription());
+        $this->assertSame('bar, baz', $result->getHeader('Foo'));
+    }
+
+    /**
      * Create a mocked HTTP response for "adapting"
      *
      * @param  string $body              The body of the response
@@ -80,7 +98,7 @@ class HttpResponseAdapterTest extends \PHPUnit_Framework_TestCase
     protected function getInterface($body = null, $statusCode = null, $statusDescription = null)
     {
         $httpRequest = new HTTPResponse($body, $statusCode, $statusDescription);
-        $adapter = new HttpResponseAdapter($httpRequest);
-        return $adapter->toPsr7();
+        $adapter = new HttpResponseAdapter;
+        return $adapter->toPsr7($httpRequest);
     }
 }
