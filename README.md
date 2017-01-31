@@ -24,14 +24,12 @@ Add `?flush=1` to your browser URL, `flush=1` to your `sake` command arguments o
 
 ### Converting to PSR-7
 
-This module works by providing either a `HTTPRequest` or a `HTTPResponse` class that is pre-configured and ready to be
-sent to the client/server to the corresponding adapter class:
+This module works by providing either a `HTTPRequest` or a `HTTPResponse` class that is pre-configured and ready to be sent to the client/server to the corresponding adapter class:
 
 * `HTTPRequest` uses the `Robbie\Psr7\HttpRequestAdapter` class
 * `HTTPResponse` uses the `Robbie\Psr7\HttpResponseAdapter` class
 
-To retrieve a bootstrapped PSR-7 `ServerRequestInterface` or `ResponseInterface` you can call `->toPsr7($request)` on either of
-these classes, for example:
+To retrieve a bootstrapped PSR-7 `ServerRequestInterface` or `ResponseInterface` you can call `->toPsr7($request)` on either of these classes, for example:
 
 ```php
 <?php
@@ -46,7 +44,7 @@ $myResponse = new \SilverStripe\Control\HTTPResponse(
 $response = (new \Robbie\Psr7\HttpResponseAdapter)->toPsr7($myResponse);
 ```
 
-From here you can use any of the PSR-7 interface methods, and the results will always be immutable:
+From here you can use any of the PSR-7 interface methods, and the results will be immutable:
 
 ```php
 <?php
@@ -77,8 +75,7 @@ print_r($psrInterface->getHeaders());
 
 ### Converting from PSR-7
 
-To return a PSR-7 interface back to either an `HTTPRequest` or `HTTPResponse` class you simply need to
-do the same thing as going *to*, only use `->fromPsr7($input)` instead:
+To return a PSR-7 interface back to either an `HTTPRequest` or `HTTPResponse` class you simply need to do the same thing as going *to*, only use `->fromPsr7($input)` instead:
 
 ```php
 <?php
@@ -87,4 +84,4 @@ do the same thing as going *to*, only use `->fromPsr7($input)` instead:
 $httpRequest = (new HttpRequestAdapter)->fromPsr7($requestInterface);
 ```
 
-`$httpRequest` is not a SilverStripe `HTTPRequest` class.
+`$httpRequest` is now a `SilverStripe\Control\HTTPRequest` instance.
