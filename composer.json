@@ -15,7 +15,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Robbie\\Psr7\\": "src/",
+            "Robbie\\Psr7\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Robbie\\Psr7\\Tests\\": "tests/"
         }
     },
