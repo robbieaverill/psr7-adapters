@@ -1,9 +1,9 @@
 {
     "name": "robbie/psr7-adapters",
     "description": "PSR-7 compliant adapters for SilverStripe HTTP classes",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "require": {
-        "silverstripe/framework": "^4.0@dev",
+        "silverstripe/framework": "^4.0",
         "guzzlehttp/psr7": "^1.3"
     },
     "license": "BSD-3-Clause",
