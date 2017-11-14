@@ -9,13 +9,13 @@ env:
 
 before_script:
  - phpenv rehash
+ - echo 'memory_limit = 2048M' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
  - composer self-update
- - git clone git://github.com/silverstripe/silverstripe-travis-support.git ~/travis-support
- - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss
- - cd ~/builds/ss
+ - composer validate
+ - composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
 
 script:
- - vendor/bin/phpunit --coverage-clover=coverage.xml psr7-adapters/tests
+ - vendor/bin/phpunit --coverage-clover=coverage.xml ./tests
 
 after_success:
   - mv coverage.xml ~/build/$TRAVIS_REPO_SLUG

@@ -79,6 +79,9 @@ class HttpRequestAdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function getInterface($method, $uri, $get = [], $post = [], $body = null)
     {
+        // set server protocol as AbstractHttpAdapter relies on it
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+
         $httpRequest = new HTTPRequest($method, $uri, $get, $post, $body);
         $adapter = new HttpRequestAdapter;
         $adapter->setServerVars($this->mockRequestData());
