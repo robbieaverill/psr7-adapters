@@ -56,7 +56,7 @@ class HttpResponseAdapterTest extends \PHPUnit_Framework_TestCase
      * Ensure that as per PSR-7 specifications the interfaces are immutable, and different instances returned
      * when we add headers to it (for example)
      */
-    public function testImmutabilyAddHeaders()
+    public function testImmutablyAddHeaders()
     {
         $interface = $this->getInterface();
 
@@ -85,6 +85,22 @@ class HttpResponseAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(201, $result->getStatusCode());
         $this->assertSame('Testing', $result->getStatusDescription());
         $this->assertSame('bar, baz', $result->getHeader('Foo'));
+    }
+
+    /**
+     * Ensure that headers can be removed from the response, and that the return is immutable
+     */
+    public function testImmutablyRemoveHeaders()
+    {
+        $interface = $this->getInterface();
+
+        $new = $interface->withHeader('Content-Type', 'application/json');
+        $this->assertNotSame($new, $interface);
+        $this->assertSame(['application/json'], $new->getHeader('Content-Type'));
+
+        $new = $interface->withoutHeader('Content-Type');
+        $this->assertFalse($new->hasHeader('Content-Type'));
+        $this->assertTrue($interface->hasHeader('Content-Type'));
     }
 
     /**

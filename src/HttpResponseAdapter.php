@@ -3,8 +3,6 @@
 namespace Robbie\Psr7;
 
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
-use Robbie\Psr7\AbstractHttpAdapter;
 use SilverStripe\Control\HTTPResponse;
 
 /**
