@@ -77,7 +77,7 @@ class HttpRequestAdapter extends AbstractHttpAdapter
         $vars = $this->getServerVars();
 
         $uri = '';
-        $protocol = (isset($vars['HTTPS']) || $vars['SERVER_PORT'] === '443') ? 'https' : 'http';
+        $protocol = isset($vars['HTTPS']) || (isset($vars['SERVER_PORT']) && $vars['SERVER_PORT'] === '443') ? 'https' : 'http';
         $uri .= $protocol . '://';
 
         if (!empty($vars['PHP_AUTH_USER'])) {
