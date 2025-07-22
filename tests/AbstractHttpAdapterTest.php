@@ -2,10 +2,10 @@
 
 namespace Robbie\Psr7\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Robbie\Psr7\AbstractHttpAdapter;
 
-class AbstractHttpAdapterTest extends PHPUnit_Framework_TestCase
+class AbstractHttpAdapterTest extends TestCase
 {
     public function testGetAndSetProtocolVersion()
     {
