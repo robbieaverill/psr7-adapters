@@ -1,14 +1,15 @@
 # robbie/psr7-adapters
 
-[![Build Status](https://travis-ci.org/robbieaverill/psr7-adapters.svg?branch=master)](https://travis-ci.org/robbieaverill/psr7-adapters) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/robbieaverill/psr7-adapters/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/robbieaverill/psr7-adapters/?branch=master) [![codecov](https://codecov.io/gh/robbieaverill/psr7-adapters/branch/master/graph/badge.svg)](https://codecov.io/gh/robbieaverill/psr7-adapters)
+[![CI](https://github.com/robbieaverill/psr7-adapters/actions/workflows/ci.yml/badge.svg)](https://github.com/robbieaverill/psr7-adapters/actions/workflows/ci.yml)
 
 
 PSR-7 compliant, immutable adapter interfaces for SilverStripe HTTP classes.
 
 ## Requirements
 
-* `silverstripe/framework` ^4.0
+* `silverstripe/framework` ^6.0
 * `guzzlehttp/psr7`
+* PHP ^8.1
 
 ## Installation
 
