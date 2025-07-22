@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ci:
+    name: CI
+    permissions:
+      pull-requests: read
+      contents: read
+    uses: silverstripe/gha-ci/.github/workflows/ci.yml@v2
