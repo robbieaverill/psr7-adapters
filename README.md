@@ -9,7 +9,7 @@ PSR-7 compliant, immutable adapter interfaces for SilverStripe HTTP classes.
 
 * `silverstripe/framework` ^6.0
 * `guzzlehttp/psr7`
-* PHP ^8.1
+* PHP ^8.3
 
 ## Installation
 
